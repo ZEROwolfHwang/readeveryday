@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.sineom.thinkday.adapter.LeftDrawerAdapter;
 import com.sineom.thinkday.adapter.LeftDrawerItemDecoration;
@@ -58,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void initLeftDrawer() {
-        ArrayList<String> datas = new ArrayList<>();
+        final ArrayList<String> datas = new ArrayList<>();
         datas.add("每日推荐");
         datas.add("社会一面");
         datas.add("读点好书");
@@ -67,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mRvLeftDrawer.setAdapter(new LeftDrawerAdapter(this, datas, new LeftDrawerAdapter.CLick() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(BaseActivity.this, "position:" + position, Toast.LENGTH_SHORT).show();
+                toolbar.setTitle(datas.get(position));
             }
         }));
     }
