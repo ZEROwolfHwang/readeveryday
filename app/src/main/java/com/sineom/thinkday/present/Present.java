@@ -12,6 +12,4 @@ import rx.Observable;
  */
 public interface Present {
     Observable<Document> getArticle(String url);
-
-    void getBook();
 }

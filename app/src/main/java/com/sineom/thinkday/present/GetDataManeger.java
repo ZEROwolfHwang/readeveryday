@@ -1,4 +1,4 @@
-package com.sineom.thinkday.model;
+package com.sineom.thinkday.present;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -2,4 +2,9 @@
     <string name="app_name">每日一识</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string-array name="leftItem">
+        <item>每日推荐</item>
+        <item>社会一面</item>
+        <item>好书推荐</item>
+    </string-array>
 </resources>

@@ -2,14 +2,11 @@ package com.sineom.thinkday.view;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
+import com.sineom.thinkday.model.UrlManager;
 import com.sineom.thinkday.present.PresentIml;
-import com.sineom.thinkday.present.SingleFragment;
 
 import org.jsoup.nodes.Document;
 
@@ -33,10 +30,6 @@ public class ArticleFragment extends SingleFragment {
     private PresentIml mPresentIml;
     private Subscription mSubscribe;
 
-    @Override
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_article, container, false);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,13 +39,10 @@ public class ArticleFragment extends SingleFragment {
     }
 
     private void setAritcle() {
-        mSubscribe = mPresentIml.getArticle("http://meiriyiwen.com/")
+        mSubscribe = mPresentIml.getArticle(UrlManager.ARTICLE)
                 .subscribe(new Action1<Document>() {
                     @Override
                     public void call(Document document) {
-                        mArticleTitleTv.setTypeface(mCustomFont);
-                        mArticleAuthorTv.setTypeface(mCustomFont);
-                        mArticleTv.setTypeface(mCustomFont);
                         mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
                         mArticleAuthorTv.setText(document.getElementsByClass("articleAuthorName").text());
                         mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
@@ -65,5 +55,10 @@ public class ArticleFragment extends SingleFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mSubscribe.unsubscribe();
+    }
+
+    @Override
+    public int createView() {
+        return R.layout.fragment_article;
     }
 }

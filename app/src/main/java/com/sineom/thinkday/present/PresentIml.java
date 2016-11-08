@@ -1,7 +1,5 @@
 package com.sineom.thinkday.present;
 
-import com.sineom.thinkday.model.GetDataManeger;
-
 import org.jsoup.nodes.Document;
 
 import rx.Observable;
@@ -23,10 +21,5 @@ public class PresentIml implements Present {
     @Override
     public Observable<Document> getArticle(String url) {
         return mManeger.getAritcle(url);
-    }
-
-    @Override
-    public void getBook() {
-
     }
 }

@@ -17,8 +17,11 @@ import com.sineom.thinkday.adapter.LeftDrawerAdapter;
 import com.sineom.thinkday.adapter.LeftDrawerItemDecoration;
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.view.ArticleFragment;
+import com.sineom.thinkday.view.BookFragment;
+import com.sineom.thinkday.view.SocietySide;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +37,11 @@ public class BaseActivity extends AppCompatActivity {
     @BindView(R.id.rv_left_drawer)
     public RecyclerView mRvLeftDrawer;
     private FragmentManager mManager;
-    private Fragment mFragment;
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
+    Fragment mFragment;
 
     private int getLayoutResId() {
         return R.layout.activity_content;
@@ -49,22 +52,42 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         ButterKnife.bind(this);
-        initFragment();
+        initFragment(new ArticleFragment(), GLobalData.ARTICLE);
         initToolbar();
         initLeftDrawer();
     }
 
     private void initLeftDrawer() {
-        final ArrayList<String> datas = new ArrayList<>();
-        datas.add("每日推荐");
-        datas.add("社会一面");
-        datas.add("读点好书");
+        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.leftItem));
         mRvLeftDrawer.setLayoutManager(new LinearLayoutManager(this));
-        mRvLeftDrawer.addItemDecoration(new LeftDrawerItemDecoration(36));
-        mRvLeftDrawer.setAdapter(new LeftDrawerAdapter(this, datas, new LeftDrawerAdapter.CLick() {
+        mRvLeftDrawer.addItemDecoration(new LeftDrawerItemDecoration(48));
+        mRvLeftDrawer.setAdapter(new LeftDrawerAdapter(this, strings, new LeftDrawerAdapter.CLick() {
             @Override
-            public void onItemClick(int position) {
-                toolbar.setTitle(datas.get(position));
+            public void onItemClick(Object position) {
+                toolbar.setTitle(strings.get((int) position));
+                openOrClose();
+                switch ((int) position) {
+                    case 0:
+                        mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
+                        if (mFragment == null)
+                            mFragment = new ArticleFragment();
+                        initFragment(mFragment, GLobalData.ARTICLE);
+                        break;
+                    case 1:
+                        mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
+                        if (mFragment == null)
+                            mFragment = new SocietySide();
+                        initFragment(mFragment, GLobalData.SOCIETYSICE);
+                        break;
+                    case 2:
+                        mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
+                        if (mFragment == null)
+                            mFragment = new BookFragment();
+                        initFragment(mFragment, GLobalData.BOOK);
+                        break;
+                    default:
+                        break;
+                }
             }
         }));
     }
@@ -81,22 +104,24 @@ public class BaseActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT))
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
-                else
-                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                openOrClose();
             }
         });
     }
 
-    private void initFragment() {
-        mManager = getFragmentManager();
-        mFragment = mManager.findFragmentById(R.id.fragment_content);
-        if (mFragment == null) {
-            mFragment = new ArticleFragment();
-            mManager.beginTransaction()
-                    .add(R.id.fragment_content, mFragment, GLobalData.ARTICLE)
-                    .commit();
-        }
+    private void openOrClose() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        else
+            mDrawerLayout.openDrawer(Gravity.LEFT);
     }
+
+
+    private void initFragment(Fragment fragment, String tag) {
+        mManager = getFragmentManager();
+        mManager.beginTransaction()
+                .replace(R.id.fragment_content, fragment, tag)
+                .commit();
+    }
+
 }

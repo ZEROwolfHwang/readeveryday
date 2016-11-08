@@ -6,19 +6,9 @@
              android:keepScreenOn="true"
     >
 
-    <com.google.android.exoplayer.AspectRatioFrameLayout
-        android:id="@+id/video_frame"
+    <SurfaceView
+        android:id="@+id/sv_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
-
-        <SurfaceView
-            android:id="@+id/sv_video"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"/>
-
-
-    </com.google.android.exoplayer.AspectRatioFrameLayout>
-
+        android:layout_gravity="center"/>
 </FrameLayout>
