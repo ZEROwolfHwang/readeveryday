@@ -48,7 +48,6 @@ public abstract class SingleFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initRecycler();
-
     }
 
     public void initRecycler() {

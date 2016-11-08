@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 
 import butterknife.BindView;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
@@ -40,20 +41,18 @@ public class ArticleFragment extends SingleFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setAritcle();
     }
 
     private void setAritcle() {
         mSubscribe = mPresentIml.getArticle(UrlManager.ARTICLE)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Document>() {
                                @Override
                                public void call(Document document) {
-                                   Log.d("ArticleFragment1", "document.body():" + document.body());
-                                   Log.d("ArticleFragment", document.getElementsByClass("articleTitle").text());
-//                                   mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
-                                   mArticleTitleTv.setText("1");
+                                   mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
                                    mArticleAuthorTv.setText(document.getElementsByClass("articleAuthorName").text());
                                    mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
                                }

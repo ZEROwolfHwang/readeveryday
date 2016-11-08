@@ -12,8 +12,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * User: sineom(sineom@126.com)
@@ -33,7 +33,7 @@ public class SocietyPresent implements Present {
 
     public void getDatasFormHtml(String url) {
         getArticle(url)
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Document>() {
                                @Override
                                public void call(Document document) {
