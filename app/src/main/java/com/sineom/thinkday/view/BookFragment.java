@@ -23,6 +23,13 @@ public class BookFragment extends SingleFragment implements SurfaceHolder.Callba
     @BindView(R.id.fl_root)
     FrameLayout root;
 
+    public BookFragment() {
+    }
+
+    @Override
+    public void initDatas() {
+
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -51,9 +58,5 @@ public class BookFragment extends SingleFragment implements SurfaceHolder.Callba
         return R.layout.fragment_book;
     }
 
-//    @Override
-//    public void onNewIntent(Intent intent) {
-//        releasePlayer();
-//    }
 
 }

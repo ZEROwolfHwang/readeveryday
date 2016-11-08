@@ -1,9 +1,10 @@
 package com.sineom.thinkday.view;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,21 @@ import butterknife.ButterKnife;
  */
 public abstract class SingleFragment extends Fragment {
 
-    public FragmentManager mManager;
+    FragmentManager mManager;
+
     public abstract int createView();
+
+    public SingleFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        initDatas();
+    }
+
+
+    public abstract void initDatas();
 
     @Nullable
     @Override
@@ -28,5 +42,16 @@ public abstract class SingleFragment extends Fragment {
         View view = inflater.inflate(createView(), container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initRecycler();
+
+    }
+
+    public void initRecycler() {
+
     }
 }
