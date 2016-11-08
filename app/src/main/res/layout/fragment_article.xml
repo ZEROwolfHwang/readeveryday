@@ -7,44 +7,41 @@
     android:orientation="vertical">
 
     <ScrollView
-        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:id="@+id/article_title_tv"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:gravity="center"
+                android:textSize="18sp"
                 />
 
             <TextView
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textStyle="bold"
-                android:textSize="14sp"
                 android:id="@+id/article_author_tv"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
+                android:textSize="14sp"
                 />
 
             <TextView
-                android:textStyle="bold"
-                android:lineSpacingExtra="8sp"
-                android:textSize="18sp"
                 android:id="@+id/article_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:lineSpacingExtra="8sp"
+                android:textSize="16sp"
                 />
 
         </LinearLayout>

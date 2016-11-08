@@ -50,9 +50,13 @@ public class ArticleFragment extends SingleFragment {
                 .subscribe(new Action1<Document>() {
                     @Override
                     public void call(Document document) {
+                        mArticleTitleTv.setTypeface(mCustomFont);
+                        mArticleAuthorTv.setTypeface(mCustomFont);
+                        mArticleTv.setTypeface(mCustomFont);
                         mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
                         mArticleAuthorTv.setText(document.getElementsByClass("articleAuthorName").text());
                         mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
+
                     }
                 });
     }

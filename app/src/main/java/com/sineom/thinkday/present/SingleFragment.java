@@ -2,6 +2,7 @@ package com.sineom.thinkday.present;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 public abstract class SingleFragment extends Fragment {
 
     public FragmentManager mManager;
+    public Typeface mCustomFont;
 
     public abstract View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
@@ -28,6 +30,7 @@ public abstract class SingleFragment extends Fragment {
         mManager = getFragmentManager();
         View view = createView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, view);
+        mCustomFont = Typeface.createFromAsset(getActivity().getAssets(), "msyh.ttf");
         return view;
     }
 }

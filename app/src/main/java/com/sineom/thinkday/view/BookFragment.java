@@ -2,7 +2,6 @@ package com.sineom.thinkday.view;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -25,7 +24,6 @@ import com.sineom.thinkday.R;
 import com.sineom.thinkday.model.CustomPlayer;
 import com.sineom.thinkday.model.ExtractorRendererBuilder;
 import com.sineom.thinkday.model.KeyCompatibleMediaController;
-import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.present.PresentIml;
 import com.sineom.thinkday.present.SingleFragment;
 
@@ -49,15 +47,9 @@ public class BookFragment extends SingleFragment implements SurfaceHolder.Callba
     private boolean playerNeedsPrepare;
     private Uri contentUri;
     private PresentIml mPresentIml;
-    private BaseActivity mBaseActivity;
     @BindView(R.id.fl_root)
     FrameLayout root;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mBaseActivity = (BaseActivity) activity;
-    }
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +60,6 @@ public class BookFragment extends SingleFragment implements SurfaceHolder.Callba
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mBaseActivity.toolbarTitle.setText("每日一书");
         mPresentIml = new PresentIml();
         root.setOnTouchListener(new View.OnTouchListener() {
             @Override

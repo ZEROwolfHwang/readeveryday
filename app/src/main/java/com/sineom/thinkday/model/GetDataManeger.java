@@ -18,14 +18,15 @@ import rx.schedulers.Schedulers;
  */
 public class GetDataManeger {
     public Observable<Document> getAritcle(String url) {
-//        return Observable.just("http://meiriyiwen.com/")
         return Observable.just(url)
                 .flatMap(new Func1<String, Observable<Document>>() {
                     @Override
                     public Observable<Document> call(String s) {
                         Document document = null;
                         try {
-                            document = Jsoup.connect(s).get();
+                            document = Jsoup.connect(s)
+                                    .timeout(5000)
+                                    .get();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

@@ -22,7 +22,6 @@ public class PresentIml implements Present {
 
     @Override
     public Observable<Document> getArticle(String url) {
-//        return mManeger.getAritcle();
         return mManeger.getAritcle(url);
     }
 
