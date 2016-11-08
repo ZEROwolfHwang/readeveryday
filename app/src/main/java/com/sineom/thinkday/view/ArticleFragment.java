@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
-import com.sineom.thinkday.model.UrlManager;
+import com.sineom.thinkday.present.UrlManager;
 import com.sineom.thinkday.present.PresentIml;
 
 import org.jsoup.nodes.Document;
@@ -40,8 +40,8 @@ public class ArticleFragment extends SingleFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         setAritcle();
     }
 
@@ -50,8 +50,11 @@ public class ArticleFragment extends SingleFragment {
                 .subscribe(new Action1<Document>() {
                                @Override
                                public void call(Document document) {
-                                   mPresentIml.setText(mArticleTitleTv, document.getElementsByClass("articleTitle").text());
-                                   mPresentIml.setText(mArticleAuthorTv, document.getElementsByClass("articleAuthorName").text());
+                                   Log.d("ArticleFragment1", "document.body():" + document.body());
+                                   Log.d("ArticleFragment", document.getElementsByClass("articleTitle").text());
+//                                   mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
+                                   mArticleTitleTv.setText("1");
+                                   mArticleAuthorTv.setText(document.getElementsByClass("articleAuthorName").text());
                                    mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
                                }
                            },

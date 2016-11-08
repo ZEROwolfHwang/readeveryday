@@ -15,15 +15,9 @@ import rx.Observable;
  */
 public class PresentIml implements Present {
 
-    private final GetDataManeger mManeger;
-
-    public PresentIml() {
-        mManeger = new GetDataManeger();
-    }
-
     @Override
     public Observable<Document> getArticle(String url) {
-        return mManeger.getAritcle(url);
+        return GetDataManeger.sGetDataManeger().getAritcle(url);
     }
 
     public void setText(View view, String text) {

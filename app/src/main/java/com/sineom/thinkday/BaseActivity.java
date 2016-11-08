@@ -18,7 +18,7 @@ import com.sineom.thinkday.adapter.LeftDrawerItemDecoration;
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.view.ArticleFragment;
 import com.sineom.thinkday.view.BookFragment;
-import com.sineom.thinkday.view.SocietySide;
+import com.sineom.thinkday.view.SocietySideFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +76,7 @@ public class BaseActivity extends AppCompatActivity {
                     case 1:
                         mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
                         if (mFragment == null)
-                            mFragment = new SocietySide();
+                            mFragment = new SocietySideFragment();
                         initFragment(mFragment, GLobalData.SOCIETYSICE);
                         break;
                     case 2:
