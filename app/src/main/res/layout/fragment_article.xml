@@ -18,7 +18,8 @@
             android:orientation="vertical">
 
             <TextView
-                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textSize="18sp"
                 android:id="@+id/article_title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -26,7 +27,10 @@
                 />
 
             <TextView
-                android:textSize="10sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:id="@+id/article_author_tv"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -34,8 +38,9 @@
                 />
 
             <TextView
+                android:textStyle="bold"
                 android:lineSpacingExtra="8sp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:id="@+id/article_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

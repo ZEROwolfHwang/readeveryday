@@ -16,6 +16,7 @@ import android.view.View;
 import com.sineom.thinkday.adapter.LeftDrawerAdapter;
 import com.sineom.thinkday.adapter.LeftDrawerItemDecoration;
 import com.sineom.thinkday.present.GLobalData;
+import com.sineom.thinkday.view.ArticleFragment;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
  * Time: 13:42
  * DESIC
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
     @BindView(R.id.rv_left_drawer)
     public RecyclerView mRvLeftDrawer;
@@ -38,9 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
-
-
-    public abstract Fragment createFragment();
 
     private int getLayoutResId() {
         return R.layout.activity_content;
@@ -95,9 +93,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         mManager = getFragmentManager();
         mFragment = mManager.findFragmentById(R.id.fragment_content);
         if (mFragment == null) {
-            mFragment = createFragment();
+            mFragment = new ArticleFragment();
             mManager.beginTransaction()
-                    .add(R.id.fragment_content, mFragment, GLobalData.MAIN)
+                    .add(R.id.fragment_content, mFragment, GLobalData.ARTICLE)
                     .commit();
         }
     }

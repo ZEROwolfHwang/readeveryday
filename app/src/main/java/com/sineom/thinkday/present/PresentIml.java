@@ -21,9 +21,9 @@ public class PresentIml implements Present {
     }
 
     @Override
-    public Observable<Document> getArticle() {
-//      return  mManeger.getAritcle("http://meiriyiwen.com/");
-      return  mManeger.getAritcle("http://voice.meiriyiwen.com/voice/show?vid=456");
+    public Observable<Document> getArticle(String url) {
+//        return mManeger.getAritcle();
+        return mManeger.getAritcle(url);
     }
 
     @Override

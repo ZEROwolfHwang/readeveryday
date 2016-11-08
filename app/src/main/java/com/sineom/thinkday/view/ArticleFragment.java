@@ -1,15 +1,13 @@
 package com.sineom.thinkday.view;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
-import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.present.PresentIml;
 import com.sineom.thinkday.present.SingleFragment;
 
@@ -34,7 +32,6 @@ public class ArticleFragment extends SingleFragment {
     TextView mArticleTv;
     private PresentIml mPresentIml;
     private Subscription mSubscribe;
-    private BaseActivity mBaseActivity;
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,28 +39,20 @@ public class ArticleFragment extends SingleFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mBaseActivity = (BaseActivity) activity;
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mBaseActivity.toolbarTitle.setText("每日一文");
         mPresentIml = new PresentIml();
         setAritcle();
     }
 
     private void setAritcle() {
-        mSubscribe = mPresentIml.getArticle()
+        mSubscribe = mPresentIml.getArticle("http://meiriyiwen.com/")
                 .subscribe(new Action1<Document>() {
                     @Override
                     public void call(Document document) {
                         mArticleTitleTv.setText(document.getElementsByClass("articleTitle").text());
                         mArticleAuthorTv.setText(document.getElementsByClass("articleAuthorName").text());
-                        mArticleTv.setText(document.body().toString());
-                        Log.d("ArticleFragment", "--"+document.getElementsByTag("audio").attr("src"));
+                        mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
                     }
                 });
     }
