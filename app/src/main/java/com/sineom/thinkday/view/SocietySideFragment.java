@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.adapter.SocietySideAdapter;
+import com.sineom.thinkday.bean.SocietyBean;
 import com.sineom.thinkday.present.SocietyPresent;
 import com.sineom.thinkday.present.UrlManager;
 
@@ -32,6 +33,8 @@ public class SocietySideFragment extends SingleFragment {
     @BindView(R.id.society_rv)
     RecyclerView society_rv;
     private SocietyPresent mPresent;
+    private LinearLayoutManager mLinearLayoutManager;
+    private SocietySideAdapter mSocietySideAdapter;
 
     @Override
     public int createView() {
@@ -44,8 +47,13 @@ public class SocietySideFragment extends SingleFragment {
     @Override
     public void initDatas() {
         mPresent = new SocietyPresent();
-//        mPresent.getDatasFormHtml(UrlManager.SOCIETYSIDE);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mSocietySideAdapter = new SocietySideAdapter(getActivity(), mPresent.getDatas(), new SocietySideAdapter.ItemClick() {
+            @Override
+            public void onItemClick(SocietyBean societyBean) {
 
+            }
+        });
     }
 
     @Override
@@ -56,6 +64,7 @@ public class SocietySideFragment extends SingleFragment {
                 .subscribe(new Action1<Document>() {
                                @Override
                                public void call(Document document) {
+                                   long start = System.currentTimeMillis();
                                    Elements a13 = document.getElementsByClass("left_contant");
                                    for (Element element : a13) {
                                        Elements a = element.getElementsByTag("a");
@@ -67,8 +76,12 @@ public class SocietySideFragment extends SingleFragment {
                                            }
                                        }
                                    }
-                                   society_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-                                   society_rv.setAdapter(new SocietySideAdapter(getActivity(), mPresent.getDatas()));
+                                   long end = System.currentTimeMillis();
+//                                   society_rv.setLayoutManager(mLinearLayoutManager);
+//                                   society_rv.setAdapter( new SocietySideAdapter(getActivity(), mPresent.getDatas()));
+                                   mSocietySideAdapter.setDatas(mPresent.getDatas());
+
+                                   Log.d("SocietySideFragment", "end-start:" + (end - start));
                                }
                            },
                         new Action1<Throwable>() {
@@ -79,7 +92,9 @@ public class SocietySideFragment extends SingleFragment {
                         });
     }
 
+    @Override
     public void initRecycler() {
-
+        society_rv.setLayoutManager(mLinearLayoutManager);
+        society_rv.setAdapter(mSocietySideAdapter);
     }
 }
