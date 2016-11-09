@@ -1,9 +1,5 @@
 package com.sineom.thinkday.present;
 
-import com.sineom.thinkday.bean.ArticleBean;
-
-import org.jsoup.nodes.Document;
-
 import rx.Observable;
 
 /**
@@ -12,8 +8,7 @@ import rx.Observable;
  * Time: 22:41
  * DES
  */
-public interface Present {
-    Observable<ArticleBean> getArticle(String url);
+public interface Present<T> {
+    Observable<T> getArticle(String url);
 
-    Observable<Document> getData(String url);
 }

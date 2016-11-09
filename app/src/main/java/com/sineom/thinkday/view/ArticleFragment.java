@@ -51,7 +51,7 @@ public class ArticleFragment extends SingleFragment {
                                @Override
                                public void call(ArticleBean articleBean) {
                                    mArticleTitleTv.setText(articleBean.title);
-                                   mArticleAuthorTv.setText(articleBean.title);
+                                   mArticleAuthorTv.setText(articleBean.author);
                                    mArticleTv.setText(articleBean.contant);
                                }
                            },

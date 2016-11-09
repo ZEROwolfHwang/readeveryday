@@ -11,9 +11,7 @@ import com.sineom.thinkday.bean.SocietyBean;
 import com.sineom.thinkday.present.SocietyPresent;
 import com.sineom.thinkday.present.UrlManager;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,6 +39,9 @@ public class SocietySideFragment extends SingleFragment {
         return R.layout.societyside_layout;
     }
 
+    /**
+     * v4包下系统的一个bug 必须实现
+     */
     public SocietySideFragment() {
     }
 
@@ -61,35 +62,19 @@ public class SocietySideFragment extends SingleFragment {
         super.onActivityCreated(savedInstanceState);
         mPresent.getArticle(UrlManager.SOCIETYSIDE)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Document>() {
+                .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                @Override
-                               public void call(Document document) {
-                                   long start = System.currentTimeMillis();
-                                   Elements a13 = document.getElementsByClass("left_contant");
-                                   for (Element element : a13) {
-                                       Elements a = element.getElementsByTag("a");
-                                       for (Element hraf : a) {
-                                           String href = hraf.attr("href").toString();
-                                           if (href.endsWith(".html")) {
-                                               mPresent.getDatas().add(mPresent.saveData(hraf.attr("href").toString(),
-                                                       hraf.attr("title").toString(), element.getElementsByTag("p").text()));
-                                           }
-                                       }
-                                   }
-                                   long end = System.currentTimeMillis();
-//                                   society_rv.setLayoutManager(mLinearLayoutManager);
-//                                   society_rv.setAdapter( new SocietySideAdapter(getActivity(), mPresent.getDatas()));
-                                   mSocietySideAdapter.setDatas(mPresent.getDatas());
-
-                                   Log.d("SocietySideFragment", "end-start:" + (end - start));
+                               public void call(ArrayList<SocietyBean> societyBeen) {
+                                   mSocietySideAdapter.setDatas(societyBeen);
                                }
                            },
                         new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                Log.d("SocietyPresent", throwable.getMessage());
+                                Log.d("SocietySideFragment", throwable.getMessage());
                             }
-                        });
+                        }
+                );
     }
 
     @Override
