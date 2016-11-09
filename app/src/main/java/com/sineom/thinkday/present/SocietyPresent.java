@@ -86,6 +86,7 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                     public Observable<ArticleBean> call(Document document) {
                         ArticleBean bean = new ArticleBean();
                         bean.contant = Html.fromHtml(document.select("div.neir").toString());
+                        bean.title = document.select("h1").text();
                         return Observable.just(bean);
                     }
                 });

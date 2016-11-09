@@ -5,9 +5,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.adapter.SocietySideAdapter;
 import com.sineom.thinkday.bean.SocietyBean;
+import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.present.SocietyPresent;
 import com.sineom.thinkday.present.UrlManager;
 
@@ -38,6 +40,7 @@ public class SocietySideFragment extends SingleFragment {
     private Subscription mSocietySideFragment;
     private Observable<ArrayList<SocietyBean>> mArrayListObservable;
 
+
     @Override
     public int createView() {
         return R.layout.societyside_layout;
@@ -56,7 +59,12 @@ public class SocietySideFragment extends SingleFragment {
         mSocietySideAdapter = new SocietySideAdapter(getActivity(), mPresent.getDatas(), new SocietySideAdapter.ItemClick() {
             @Override
             public void onItemClick(SocietyBean societyBean) {
-//                ((BaseActivity) getActivity()).initFragment(new ArticleFragment(), GLobalData.SOCIETYSICEITEM);
+                String url = societyBean.Url;
+                SocietyItem societyItem = new SocietyItem();
+                Bundle bundle = new Bundle();
+                bundle.putString(GLobalData.SOCIETYSICE, societyBean.Url);
+                societyItem.setArguments(bundle);
+                ((BaseActivity) getActivity()).initFragment(societyItem, GLobalData.SOCIETYSICEITEM);
             }
         });
         mArrayListObservable = mPresent.getArticle(UrlManager.SOCIETYSIDE);
