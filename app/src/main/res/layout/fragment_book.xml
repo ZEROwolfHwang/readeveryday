@@ -5,10 +5,13 @@
              android:layout_height="match_parent"
              android:keepScreenOn="true"
     >
-
-    <SurfaceView
-        android:id="@+id/sv_video"
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"/>
+</ScrollView>
 </FrameLayout>

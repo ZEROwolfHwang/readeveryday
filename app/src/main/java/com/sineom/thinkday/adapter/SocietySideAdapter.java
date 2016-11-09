@@ -1,9 +1,10 @@
 package com.sineom.thinkday.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.sineom.thinkday.R;
+import com.sineom.thinkday.bean.SocietyBean;
 
 import java.util.List;
 
@@ -17,10 +18,13 @@ import java.util.List;
  * @updataDes ${描述更新内容}
  */
 
-public class SocietySideAdapter extends BaseAdapter {
+public class SocietySideAdapter extends BaseAdapter<SocietyBean> {
 
-    public SocietySideAdapter(Context context, List datas) {
+    public ItemClick mItemClick;
+
+    public SocietySideAdapter(Context context, List datas, ItemClick itemClick) {
         super(context, datas);
+        mItemClick = itemClick;
     }
 
     @Override
@@ -29,12 +33,26 @@ public class SocietySideAdapter extends BaseAdapter {
     }
 
     @Override
-    public void convert(ViewHolder holder, Object o) {
-
+    public void convert(ViewHolder holder, final SocietyBean societyBean) {
+        holder.setText(R.id.society_title, societyBean.title);
+        holder.setText(R.id.society_desc, societyBean.listzi);
+        holder.setOnClickListener(R.id.society_root_view, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClick.onItemClick(societyBean);
+            }
+        });
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void setDatas(List datas) {
+        mDatas = datas;
+        notifyDataSetChanged();
+    }
 
+    public interface ItemClick {
+        void onItemClick(SocietyBean societyBean);
     }
 }
+
+
+

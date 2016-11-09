@@ -1,9 +1,7 @@
 package com.sineom.thinkday.view;
 
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.present.PresentIml;
@@ -16,40 +14,23 @@ import butterknife.BindView;
  * Time: 15:40
  * DESIC
  */
-public class BookFragment extends SingleFragment implements SurfaceHolder.Callback {
-    @BindView(R.id.sv_video)
-    SurfaceView surfaceView;
+public class BookFragment extends SingleFragment {
     private PresentIml mPresentIml;
-    @BindView(R.id.fl_root)
-    FrameLayout root;
+    @BindView(R.id.text)
+    TextView mTextView;
+
 
     public BookFragment() {
     }
 
     @Override
     public void initDatas() {
-
+        mPresentIml = new PresentIml();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresentIml = new PresentIml();
-        surfaceView.getHolder().addCallback(this);
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
 

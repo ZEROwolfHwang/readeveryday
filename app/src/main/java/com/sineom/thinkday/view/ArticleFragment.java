@@ -1,18 +1,17 @@
 package com.sineom.thinkday.view;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
-import com.sineom.thinkday.model.UrlManager;
+import com.sineom.thinkday.bean.ArticleBean;
 import com.sineom.thinkday.present.PresentIml;
-
-import org.jsoup.nodes.Document;
+import com.sineom.thinkday.present.UrlManager;
 
 import butterknife.BindView;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
@@ -47,12 +46,13 @@ public class ArticleFragment extends SingleFragment {
 
     private void setAritcle() {
         mSubscribe = mPresentIml.getArticle(UrlManager.ARTICLE)
-                .subscribe(new Action1<Document>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<ArticleBean>() {
                                @Override
-                               public void call(Document document) {
-                                   mPresentIml.setText(mArticleTitleTv, document.getElementsByClass("articleTitle").text());
-                                   mPresentIml.setText(mArticleAuthorTv, document.getElementsByClass("articleAuthorName").text());
-                                   mArticleTv.setText(Html.fromHtml(document.getElementsByClass("articleContent").toString()));
+                               public void call(ArticleBean articleBean) {
+                                   mArticleTitleTv.setText(articleBean.title);
+                                   mArticleAuthorTv.setText(articleBean.author);
+                                   mArticleTv.setText(articleBean.contant);
                                }
                            },
                         new Action1<Throwable>() {
