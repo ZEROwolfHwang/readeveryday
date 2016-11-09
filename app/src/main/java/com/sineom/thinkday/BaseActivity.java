@@ -117,7 +117,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    private void initFragment(Fragment fragment, String tag) {
+    public void initFragment(Fragment fragment, String tag) {
         mManager = getSupportFragmentManager();
         mManager.beginTransaction()
                 .replace(R.id.fragment_content, fragment, tag)

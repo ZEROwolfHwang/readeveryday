@@ -10,6 +10,7 @@ import com.sineom.thinkday.present.PresentIml;
 import com.sineom.thinkday.present.UrlManager;
 
 import butterknife.BindView;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -29,6 +30,7 @@ public class ArticleFragment extends SingleFragment {
     TextView mArticleTv;
     private PresentIml mPresentIml;
     private Subscription mSubscribe;
+    private Observable<ArticleBean> mArticleBeanObservable;
 
     public ArticleFragment() {
     }
@@ -36,6 +38,7 @@ public class ArticleFragment extends SingleFragment {
     @Override
     public void initDatas() {
         mPresentIml = new PresentIml();
+        mArticleBeanObservable = mPresentIml.getArticle(UrlManager.ARTICLE);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class ArticleFragment extends SingleFragment {
     }
 
     private void setAritcle() {
-        mSubscribe = mPresentIml.getArticle(UrlManager.ARTICLE)
+        mSubscribe = mArticleBeanObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ArticleBean>() {
                                @Override
@@ -67,7 +70,8 @@ public class ArticleFragment extends SingleFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mSubscribe.unsubscribe();
+        if (!mSubscribe.isUnsubscribed())
+            mSubscribe.unsubscribe();
     }
 
     @Override

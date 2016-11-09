@@ -9,5 +9,7 @@ package com.sineom.thinkday.present;
 public class GLobalData {
     public static final String ARTICLE = "acticle";
     public static final String BOOK = "book";
-    public static final String SOCIETYSICE = "book";
+    public static final String SOCIETYSICE = "society";
+    public static final String SOCIETYSICEITEM = "societyItem";
+
 }

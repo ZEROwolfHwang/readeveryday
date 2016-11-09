@@ -1,7 +1,9 @@
 package com.sineom.thinkday.present;
 
+import android.text.Html;
 import android.util.Log;
 
+import com.sineom.thinkday.bean.ArticleBean;
 import com.sineom.thinkday.bean.SocietyBean;
 import com.sineom.thinkday.model.SocietyModelImpl;
 
@@ -10,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -41,6 +44,7 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
     @Override
     public Observable<ArrayList<SocietyBean>> getArticle(String url) {
         return GetDataManeger.sGetDataManeger().getAritcle(url)
+                .throttleFirst(2, TimeUnit.SECONDS)
                 .map(new Func1<Document, ArrayList<SocietyBean>>() {
                     @Override
                     public ArrayList<SocietyBean> call(Document document) {
@@ -74,4 +78,16 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                 });
     }
 
+    public Observable<ArticleBean> getSocietyItem(String url) {
+        return GetDataManeger.sGetDataManeger()
+                .getAritcle(url)
+                .flatMap(new Func1<Document, Observable<ArticleBean>>() {
+                    @Override
+                    public Observable<ArticleBean> call(Document document) {
+                        ArticleBean bean = new ArticleBean();
+                        bean.contant = Html.fromHtml(document.select("div.neir").toString());
+                        return Observable.just(bean);
+                    }
+                });
+    }
 }

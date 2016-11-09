@@ -6,6 +6,8 @@ import com.sineom.thinkday.bean.ArticleBean;
 
 import org.jsoup.nodes.Document;
 
+import java.util.concurrent.TimeUnit;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -20,6 +22,7 @@ public class PresentIml implements Present<ArticleBean> {
     @Override
     public Observable<ArticleBean> getArticle(String url) {
         return GetDataManeger.sGetDataManeger().getAritcle(url)
+                .throttleFirst(2, TimeUnit.SECONDS)
                 .flatMap(new Func1<Document, Observable<ArticleBean>>() {
                     @Override
                     public Observable<ArticleBean> call(Document document) {
@@ -31,5 +34,6 @@ public class PresentIml implements Present<ArticleBean> {
                     }
                 });
     }
+
 
 }
