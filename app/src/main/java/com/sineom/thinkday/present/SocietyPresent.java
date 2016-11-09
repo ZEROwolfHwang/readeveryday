@@ -38,17 +38,13 @@ public class SocietyPresent implements Present {
                                @Override
                                public void call(Document document) {
                                    Elements a13 = document.getElementsByClass("left_contant");
-                                   for (Element element : a13
-                                           ) {
+                                   for (Element element : a13) {
                                        Elements a = element.getElementsByTag("a");
                                        for (Element hraf : a) {
                                            String href = hraf.attr("href").toString();
                                            if (href.endsWith(".html")) {
-                                               mDatas.add(mSocietyModel.saveSociety(hraf.attr("href").toString(),
+                                               mDatas.add(saveData(hraf.attr("href").toString(),
                                                        hraf.attr("title").toString(), element.getElementsByTag("p").text()));
-//                                    Log.d("BookFragment", hraf.attr("href").toString());
-//                                    Log.d("BookFragment", hraf.attr("title").toString());
-//                                    Log.d("BookFragment", element.getElementsByTag("p").text());
                                            }
                                        }
                                    }
@@ -69,5 +65,9 @@ public class SocietyPresent implements Present {
 
     public ArrayList<SocietyBean> getDatas() {
         return mDatas;
+    }
+
+    public SocietyBean saveData(String url, String title, String desc) {
+        return mSocietyModel.saveSociety(url, title, desc);
     }
 }
