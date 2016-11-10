@@ -48,18 +48,23 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                 .map(new Func1<Document, ArrayList<SocietyBean>>() {
                     @Override
                     public ArrayList<SocietyBean> call(Document document) {
-//                        Elements links = document.getElementsByClass("left_contant");
                         long start = System.currentTimeMillis();
-                        Elements links = document.select("div.left_contant");
-                        for (Element link : links) {
-                            Elements select = link.select("div.contant_title > a");
-                            String href = select.attr("href");
-                            String title = select.attr("title");
-                            String contant = link.select("div.listzi").text();
-                            mDatas.add(saveData(href, title, contant));
+                        try {
+                            Elements links = document.select("div.left_contant");
+                            for (Element link : links) {
+                                Elements select = link.select("div.contant_title > a");
+                                String href = select.attr("href");
+                                String title = select.attr("title");
+                                String contant = link.select("div.listzi").text();
+                                mDatas.add(saveData(href, title, contant));
+                            }
+                            long end = System.currentTimeMillis();
+                            Log.d("SocietyPresent", "end-start:" + (end - start));
+                        } catch (Exception e) {
+                            Observable.error(e);
                         }
-
-
+                        return mDatas;
+//                        Elements links = document.getElementsByClass("left_contant");
 //                        Elements a13 = document.getElementsByClass("left_contant");
 //                        for (Element element : a13) {
 //                            Elements a = element.getElementsByTag("a");
@@ -71,9 +76,6 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
 //                                }
 //                            }
 //                        }
-                        long end = System.currentTimeMillis();
-                        Log.d("SocietyPresent", "end-start:" + (end - start));
-                        return mDatas;
                     }
                 });
     }

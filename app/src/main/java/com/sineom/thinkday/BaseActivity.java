@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.view.ArticleFragment;
+import com.sineom.thinkday.view.BookFragment;
+import com.sineom.thinkday.view.SocietySideFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,49 +59,32 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_item_1:
-                        Toast.makeText(BaseActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    case R.id.navigation_article:
+                        mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
+                        if (mFragment == null)
+                            mFragment = new ArticleFragment();
+                        initFragment(mFragment, GLobalData.ARTICLE);
                         break;
-                    case R.id.navigation_item_2:
+                    case R.id.navigation_randomArticle:
                         Toast.makeText(BaseActivity.this, "2", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.navigation_society:
+                        mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
+                        if (mFragment == null)
+                            mFragment = new SocietySideFragment();
+                        initFragment(mFragment, GLobalData.SOCIETYSICE);
+                        break;
+                    case R.id.navigation_book:
+                        mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
+                        if (mFragment == null)
+                            mFragment = new BookFragment();
+                        initFragment(mFragment, GLobalData.BOOK);
+                        break;
                 }
+                openOrClose();
                 return true;
             }
         });
-
-//        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.leftItem));
-//        mRvLeftDrawer.setLayoutManager(new LinearLayoutManager(this));
-//        mRvLeftDrawer.addItemDecoration(new LeftDrawerItemDecoration(48));
-//        mRvLeftDrawer.setAdapter(new LeftDrawerAdapter(this, strings, new LeftDrawerAdapter.CLick() {
-//            @Override
-//            public void onItemClick(Object position) {
-//                toolbar.setTitle(strings.get((int) position));
-//                openOrClose();
-//                switch ((int) position) {
-//                    case 0:
-//                        mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
-//                        if (mFragment == null)
-//                            mFragment = new ArticleFragment();
-//                        initFragment(mFragment, GLobalData.ARTICLE);
-//                        break;
-//                    case 1:
-//                        mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
-//                        if (mFragment == null)
-//                            mFragment = new SocietySideFragment();
-//                        initFragment(mFragment, GLobalData.SOCIETYSICE);
-//                        break;
-//                    case 2:
-//                        mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
-//                        if (mFragment == null)
-//                            mFragment = new BookFragment();
-//                        initFragment(mFragment, GLobalData.BOOK);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//        }));
     }
 
 

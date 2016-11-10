@@ -47,6 +47,7 @@ public class GetDataManeger {
 //                                    .post();
                         } catch (IOException e) {
                             e.printStackTrace();
+                            Observable.error(e);
                         }
                         return Observable.just(document);
                     }

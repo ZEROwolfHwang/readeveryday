@@ -1,6 +1,7 @@
 package com.sineom.thinkday.view;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class ArticleFragment extends SingleFragment {
     TextView mArticleAuthorTv;
     @BindView(R.id.article_tv)
     TextView mArticleTv;
+    @BindView(R.id.fragment_article)
+    SwipeRefreshLayout mRefreshLayout;
     private PresentIml mPresentIml;
     private Subscription mSubscribe;
     private Observable<ArticleBean> mArticleBeanObservable;
@@ -47,12 +50,57 @@ public class ArticleFragment extends SingleFragment {
         setAritcle();
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        freshData();
+    }
+
+    private void freshData() {
+        mRefreshLayout.setRefreshing(true);
+//        //设置下拉出现小圆圈是否是缩放出现，出现的位置，最大的下拉位置
+        mRefreshLayout.setProgressViewOffset(true, 50, 200);
+//        mRefreshLayout.setDistanceToTriggerSync(20);
+//
+////设置下拉圆圈的大小，两个值 LARGE， DEFAULT
+        mRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
+//
+//// 设置下拉圆圈上的颜色，蓝色、绿色、橙色、红色
+        mRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+//
+//
+////// 设定下拉圆圈的背景
+        mRefreshLayout.setProgressBackgroundColor(R.color.Indigo_colorPrimary);
+//
+///*
+// * 设置手势下拉刷新的监听
+// */
+        mRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // 刷新动画开始后回调到此方法
+
+                    }
+                }
+        );
+    }
+
     private void setAritcle() {
         mSubscribe = mArticleBeanObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ArticleBean>() {
                                @Override
                                public void call(ArticleBean articleBean) {
+                                   // 通过 setEnabled(false) 禁用下拉刷新
+//                                   mRefreshLayout.setEnabled(false);
+                                   if (articleBean == null)
+                                       return;
                                    mArticleTitleTv.setText(articleBean.title);
                                    mArticleAuthorTv.setText(articleBean.author);
                                    mArticleTv.setText(articleBean.contant);
