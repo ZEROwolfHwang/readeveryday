@@ -61,7 +61,7 @@ public class ArticleFragment extends SingleFragment {
                         new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                Log.d("ArticleFragment", throwable.getMessage());
+                                Log.d("ArticleFragment", throwable.getMessage() + "");
                             }
                         }
                 );

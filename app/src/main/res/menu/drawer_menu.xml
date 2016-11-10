@@ -3,8 +3,8 @@
     <item
         android:id="@+id/navigation_item_1"
         android:checked="true"
-        android:title="hehe"/>
+        android:title="每日一文"/>
     <item
         android:id="@+id/navigation_item_2"
-        android:title="haha"/>
+        android:title="随机文章"/>
 </menu>

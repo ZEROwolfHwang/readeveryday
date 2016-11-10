@@ -26,11 +26,15 @@ public class PresentIml implements Present<ArticleBean> {
                 .flatMap(new Func1<Document, Observable<ArticleBean>>() {
                     @Override
                     public Observable<ArticleBean> call(Document document) {
-                        ArticleBean bean = new ArticleBean();
-                        bean.title = document.select("h2.articleTitle").text();
-                        bean.author = document.select("div.articleAuthorName").text();
-                        bean.contant = Html.fromHtml(document.select("div.articleContent").toString());
-                        return Observable.just(bean);
+                        if (document == null) {
+                            return Observable.error(new Throwable("document=null"));
+                        } else {
+                            ArticleBean bean = new ArticleBean();
+                            bean.title = document.select("h2.articleTitle").text();
+                            bean.author = document.select("div.articleAuthorName").text();
+                            bean.contant = Html.fromHtml(document.select("div.articleContent").toString());
+                            return Observable.just(bean);
+                        }
                     }
                 });
     }
