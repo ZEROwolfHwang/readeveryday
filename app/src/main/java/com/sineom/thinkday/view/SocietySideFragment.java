@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -101,6 +100,7 @@ public class SocietySideFragment extends SingleFragment {
                             }
                         }
                 );
+        mSubscription.add(mSocietySideFragment);
     }
 
     @Override
@@ -138,13 +138,7 @@ public class SocietySideFragment extends SingleFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastPosition + 1 == mSocietySideAdapter.getItemCount()) {
                     mSocietySideAdapter.changeMoreStatus(SocietySideAdapter.LOADING_MORE);
-                    mPresent.getArticle(UrlManager.SOCIETYSIDE + (++page))
-                            .doOnSubscribe(new Action0() {
-                                @Override
-                                public void call() {
-
-                                }
-                            })
+                    Subscription subscribe = mPresent.getArticle(UrlManager.SOCIETYSIDE + (++page))
                             .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
                             .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                 @Override
@@ -157,6 +151,7 @@ public class SocietySideFragment extends SingleFragment {
 
                                 }
                             });
+                    mSubscription.add(subscribe);
                 }
             }
 
@@ -166,12 +161,5 @@ public class SocietySideFragment extends SingleFragment {
                 mLastPosition = mLinearLayoutManager.findLastVisibleItemPosition();
             }
         });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (!mSocietySideFragment.isUnsubscribed())
-            mSocietySideFragment.unsubscribe();
     }
 }
