@@ -102,8 +102,9 @@ public class ArticleFragment extends SingleFragment {
                                        public void run() {
                                            // 停止刷新
                                            mRefreshLayout.setRefreshing(false);
+                                           mRefreshLayout.setEnabled(false);
                                        }
-                                   }, 500);
+                                   }, 300);
 
                                    if (articleBean == null)
                                        return;
