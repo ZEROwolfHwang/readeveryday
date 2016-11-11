@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="horizontal">
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/loading"/>
+<RelativeLayout
+    android:id="@+id/footRootView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
 
     <TextView
-        android:gravity="center"
-        android:id="@+id/info"
-        android:layout_width="match_parent"
+        android:id="@+id/loadMore"
+        android:layout_width="140dp"
         android:layout_height="match_parent"
-        android:text="正在加载数据...."
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="4dp"
+        android:gravity="center"
+        android:textSize="14sp"
         />
-</LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_toLeftOf="@id/loadMore"
+        android:indeterminateDrawable="@drawable/loading"
+        />
+</RelativeLayout>

@@ -1,16 +1,24 @@
 package com.sineom.thinkday.adapter;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.bean.SocietyBean;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author sineom
@@ -79,10 +87,18 @@ public class SocietySideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * @param holder
      * @param position
      */
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final int layoutPosition = holder.getLayoutPosition();
         if (holder instanceof ItemViewHolder) {
-            ((ItemViewHolder) holder).item_tv.setText(mDatas.get(position).title);
+            ((ItemViewHolder) holder).itemTitle_tv.setText(mDatas.get(position).title);
+            ((ItemViewHolder) holder).itemContant_tv.setText(mDatas.get(position).listzi);
             holder.itemView.setTag(position);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClick.onItemClick(mDatas.get(layoutPosition));
+                }
+            });
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
             switch (load_more_status) {
@@ -114,16 +130,19 @@ public class SocietySideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return mDatas.size() + 1;
+        return mDatas.size();
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        public TextView item_tv;
+        @BindView(R.id.society_title)
+        public TextView itemTitle_tv;
+        @BindView(R.id.society_desc)
+        public TextView itemContant_tv;
 
         public ItemViewHolder(View view) {
             super(view);
-            item_tv = (TextView) view.findViewById(R.id.society_title);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -131,11 +150,14 @@ public class SocietySideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * 底部FootView布局
      */
     public static class FootViewHolder extends RecyclerView.ViewHolder {
-        private TextView foot_view_item_tv;
+        @BindView(R.id.loadMore)
+        public TextView foot_view_item_tv;
+        @BindView(R.id.footRootView)
+        public RelativeLayout foot_view_item_root;
 
         public FootViewHolder(View view) {
             super(view);
-            foot_view_item_tv = (TextView) view.findViewById(R.id.info);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -150,12 +172,30 @@ public class SocietySideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      *
      * @param status
      */
-    public void changeMoreStatus(int status) {
+    public void changeMoreStatus(@Status int status) {
         load_more_status = status;
+        notifyDataSetChanged();
+    }
+
+    //添加数据
+    public void addItem(List<SocietyBean> newDatas) {
+        newDatas.addAll(mDatas);
+        mDatas.removeAll(mDatas);
+        mDatas.addAll(newDatas);
+        notifyDataSetChanged();
+    }
+
+    public void addMoreItem(List<SocietyBean> newDatas) {
+        mDatas.addAll(newDatas);
         notifyDataSetChanged();
     }
 
     public interface ItemClick {
         void onItemClick(SocietyBean societyBean);
+    }
+
+    @IntDef({PULLUP_LOAD_MORE, LOADING_MORE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Status {
     }
 }

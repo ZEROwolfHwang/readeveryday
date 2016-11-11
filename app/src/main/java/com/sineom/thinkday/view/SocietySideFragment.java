@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -43,6 +44,7 @@ public class SocietySideFragment extends SingleFragment {
     private Subscription mSocietySideFragment;
     private Observable<ArrayList<SocietyBean>> mArrayListObservable;
     private int page = 1;
+    private int mLastPosition;
 
     @Override
     public int createView() {
@@ -111,7 +113,7 @@ public class SocietySideFragment extends SingleFragment {
                     @Override
                     public void onRefresh() {
                         // 刷新动画开始后回调到此方法
-                        mPresent.getUpData(UrlManager.SOCIETYSIDE + page, mPresent.getDatas().size() == 0 ? null : mPresent.getDatas().get(0).Url)
+                        mPresent.getUpData(UrlManager.SOCIETYSIDE + 1, mPresent.getDatas().size() == 0 ? null : mPresent.getDatas().get(0).Url)
                                 .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
                                 .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                                @Override
@@ -130,6 +132,40 @@ public class SocietySideFragment extends SingleFragment {
                     }
                 }
         );
+        society_rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastPosition + 1 == mSocietySideAdapter.getItemCount()) {
+                    mSocietySideAdapter.changeMoreStatus(SocietySideAdapter.LOADING_MORE);
+                    mPresent.getArticle(UrlManager.SOCIETYSIDE + (++page))
+                            .doOnSubscribe(new Action0() {
+                                @Override
+                                public void call() {
+
+                                }
+                            })
+                            .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
+                            .subscribe(new Action1<ArrayList<SocietyBean>>() {
+                                @Override
+                                public void call(ArrayList<SocietyBean> societyBeen) {
+                                    mSocietySideAdapter.setDatas(societyBeen);
+                                }
+                            }, new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mLastPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
     }
 
     @Override

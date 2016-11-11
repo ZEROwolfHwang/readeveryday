@@ -1,6 +1,5 @@
 package com.sineom.thinkday.present;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -41,8 +40,8 @@ public class GetDataManeger {
                         Document document = null;
                         try {
                             document = Jsoup.connect(s)
-                                    .timeout(3000)// 设置连接超时时间
-                                    .method(Connection.Method.POST)
+                                    .timeout(5000)// 设置连接超时时间
+//                                    .method(Connection.Method.POST)
                                     .get();
 //                                    .post();
                         } catch (IOException e) {
