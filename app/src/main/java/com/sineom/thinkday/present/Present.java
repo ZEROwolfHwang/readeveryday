@@ -11,4 +11,7 @@ import rx.Observable;
 public interface Present<T> {
     Observable<T> getArticle(String url);
 
+    Observable<T> getUpData(String url, String firstUrl);
+
+
 }

@@ -1,7 +1,6 @@
 package com.sineom.thinkday.view;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.TextView;
@@ -54,31 +53,12 @@ public class ArticleFragment extends SingleFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-            }
-        });
         freshData();
     }
 
     private void freshData() {
-        ////// 设定下拉圆圈的背景
-        mRefreshLayout.setProgressBackgroundColor(R.color.Indigo_colorPrimary);
-////        //设置下拉出现小圆圈是否是缩放出现，出现的位置，最大的下拉位置
-        mRefreshLayout.setProgressViewOffset(true, 50, 0);
-////        mRefreshLayout.setDistanceToTriggerSync(20);
-////
-//////设置下拉圆圈的大小，两个值 LARGE， DEFAULT
-        mRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
-//
-////// 设置下拉圆圈上的颜色，蓝色、绿色、橙色、红色
-        mRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        fresh(mRefreshLayout);
+        setRefreshLayout(mRefreshLayout);
         mRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -96,16 +76,8 @@ public class ArticleFragment extends SingleFragment {
                 .subscribe(new Action1<ArticleBean>() {
                                @Override
                                public void call(ArticleBean articleBean) {
-//                                    通过 setEnabled(false) 禁用下拉刷新
-                                   new Handler().postDelayed(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           // 停止刷新
-                                           mRefreshLayout.setRefreshing(false);
-                                           mRefreshLayout.setEnabled(false);
-                                       }
-                                   }, 300);
-
+                                   closeFresh(mRefreshLayout);
+                                   mRefreshLayout.setEnabled(false);
                                    if (articleBean == null)
                                        return;
                                    mArticleTitleTv.setText(articleBean.title);

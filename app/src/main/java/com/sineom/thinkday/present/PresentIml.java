@@ -33,11 +33,15 @@ public class PresentIml implements Present<ArticleBean> {
                             bean.contant = Html.fromHtml(document.select("div.articleContent").toString());
                             return Observable.just(bean);
                         } catch (Exception e) {
-                            return Observable.error(new Throwable("document=null"));
+                            return Observable.error(e);
                         }
                     }
                 });
     }
 
+    @Override
+    public Observable<ArticleBean> getUpData(String url, String firstUrl) {
+        return null;
+    }
 
 }

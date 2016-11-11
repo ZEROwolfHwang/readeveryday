@@ -37,7 +37,6 @@ public class BaseActivity extends AppCompatActivity {
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
-
     Fragment mFragment;
 
     private int getLayoutResId() {
@@ -118,5 +117,6 @@ public class BaseActivity extends AppCompatActivity {
                 .replace(R.id.fragment_content, fragment, tag)
                 .commit();
     }
+
 
 }

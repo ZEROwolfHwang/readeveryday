@@ -80,6 +80,37 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                 });
     }
 
+    @Override
+    public Observable<ArrayList<SocietyBean>> getUpData(String url, final String firstUrl) {
+        return GetDataManeger.sGetDataManeger().getAritcle(url)
+                .throttleFirst(3, TimeUnit.SECONDS)
+                .map(new Func1<Document, ArrayList<SocietyBean>>() {
+                    @Override
+                    public ArrayList<SocietyBean> call(Document document) {
+                        long start = System.currentTimeMillis();
+                        try {
+                            Elements links = document.select("div.left_contant");
+                            for (Element link : links) {
+                                Elements select = link.select("div.contant_title > a");
+                                String href = select.attr("href");
+                                if (firstUrl.equals(href)) {
+                                    Observable.empty();
+                                    break;
+                                }
+                                String title = select.attr("title");
+                                String contant = link.select("div.listzi").text();
+                                mDatas.add(0, saveData(href, title, contant));
+                            }
+                            long end = System.currentTimeMillis();
+                            Log.d("SocietyPresent", "end-start:" + (end - start));
+                        } catch (Exception e) {
+                            Observable.error(e);
+                        }
+                        return null;
+                    }
+                });
+    }
+
     public Observable<ArticleBean> getSocietyItem(String url) {
         return GetDataManeger.sGetDataManeger()
                 .getAritcle(url)
@@ -87,8 +118,14 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                     @Override
                     public Observable<ArticleBean> call(Document document) {
                         ArticleBean bean = new ArticleBean();
-                        bean.contant = Html.fromHtml(document.select("div.neir").toString());
-                        bean.title = document.select("h1").text();
+                        try {
+                            document.getElementsByTag("img ").remove();
+                            bean.contant = Html.fromHtml(document.select("div.neir").toString());
+                            bean.title = document.select("h1").text();
+
+                        } catch (Exception e) {
+                            Observable.error(e);
+                        }
                         return Observable.just(bean);
                     }
                 });

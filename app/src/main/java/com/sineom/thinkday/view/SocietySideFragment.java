@@ -1,6 +1,7 @@
 package com.sineom.thinkday.view;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,13 +13,13 @@ import com.sineom.thinkday.bean.SocietyBean;
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.present.SocietyPresent;
 import com.sineom.thinkday.present.UrlManager;
+import com.sineom.thinkday.utils.RxHolder;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
@@ -34,12 +35,14 @@ import rx.functions.Action1;
 public class SocietySideFragment extends SingleFragment {
     @BindView(R.id.society_rv)
     RecyclerView society_rv;
+    @BindView(R.id.society_swipeRefresh)
+    SwipeRefreshLayout mRefreshLayout;
     private SocietyPresent mPresent;
     private LinearLayoutManager mLinearLayoutManager;
     private SocietySideAdapter mSocietySideAdapter;
     private Subscription mSocietySideFragment;
     private Observable<ArrayList<SocietyBean>> mArrayListObservable;
-
+    private int page = 1;
 
     @Override
     public int createView() {
@@ -51,6 +54,7 @@ public class SocietySideFragment extends SingleFragment {
      */
     public SocietySideFragment() {
     }
+
 
     @Override
     public void initDatas() {
@@ -67,23 +71,30 @@ public class SocietySideFragment extends SingleFragment {
                 ((BaseActivity) getActivity()).initFragment(societyItem, GLobalData.SOCIETYSICEITEM);
             }
         });
-        mArrayListObservable = mPresent.getArticle(UrlManager.SOCIETYSIDE);
+        mArrayListObservable = mPresent.getArticle(UrlManager.SOCIETYSIDE + page);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fresh(mRefreshLayout);
+        getData();
+    }
+
+    private void getData() {
         mSocietySideFragment = mArrayListObservable
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
                 .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                @Override
                                public void call(ArrayList<SocietyBean> societyBeen) {
                                    mSocietySideAdapter.setDatas(societyBeen);
+                                   closeFresh(mRefreshLayout);
                                }
                            },
                         new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
+                                closeFresh(mRefreshLayout);
                                 Log.d("SocietySideFragment", "" + throwable.getMessage());
                             }
                         }
@@ -94,6 +105,31 @@ public class SocietySideFragment extends SingleFragment {
     public void initView() {
         society_rv.setLayoutManager(mLinearLayoutManager);
         society_rv.setAdapter(mSocietySideAdapter);
+        setRefreshLayout(mRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // 刷新动画开始后回调到此方法
+                        mPresent.getUpData(UrlManager.SOCIETYSIDE + page, mPresent.getDatas().size() == 0 ? null : mPresent.getDatas().get(0).Url)
+                                .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
+                                .subscribe(new Action1<ArrayList<SocietyBean>>() {
+                                               @Override
+                                               public void call(ArrayList<SocietyBean> societyBeen) {
+                                                   closeFresh(mRefreshLayout);
+                                                   mSocietySideAdapter.setDatas(mPresent.getDatas());
+                                                   society_rv.scrollToPosition(0);
+                                               }
+                                           },
+                                        new Action1<Throwable>() {
+                                            @Override
+                                            public void call(Throwable throwable) {
+                                                closeFresh(mRefreshLayout);
+                                            }
+                                        });
+                    }
+                }
+        );
     }
 
     @Override
