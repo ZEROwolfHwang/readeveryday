@@ -47,10 +47,10 @@ public abstract class SingleFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initRecycler();
+        initView();
     }
 
-    public void initRecycler() {
+    public void initView() {
 
     }
 }

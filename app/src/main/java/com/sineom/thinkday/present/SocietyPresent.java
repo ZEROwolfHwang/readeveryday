@@ -1,7 +1,9 @@
 package com.sineom.thinkday.present;
 
+import android.text.Html;
 import android.util.Log;
 
+import com.sineom.thinkday.bean.ArticleBean;
 import com.sineom.thinkday.bean.SocietyBean;
 import com.sineom.thinkday.model.SocietyModelImpl;
 
@@ -10,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -41,21 +44,27 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
     @Override
     public Observable<ArrayList<SocietyBean>> getArticle(String url) {
         return GetDataManeger.sGetDataManeger().getAritcle(url)
+                .throttleFirst(2, TimeUnit.SECONDS)
                 .map(new Func1<Document, ArrayList<SocietyBean>>() {
                     @Override
                     public ArrayList<SocietyBean> call(Document document) {
-//                        Elements links = document.getElementsByClass("left_contant");
                         long start = System.currentTimeMillis();
-                        Elements links = document.select("div.left_contant");
-                        for (Element link : links) {
-                            Elements select = link.select("div.contant_title > a");
-                            String href = select.attr("href");
-                            String title = select.attr("title");
-                            String contant = link.select("div.listzi").text();
-                            mDatas.add(saveData(href, title, contant));
+                        try {
+                            Elements links = document.select("div.left_contant");
+                            for (Element link : links) {
+                                Elements select = link.select("div.contant_title > a");
+                                String href = select.attr("href");
+                                String title = select.attr("title");
+                                String contant = link.select("div.listzi").text();
+                                mDatas.add(saveData(href, title, contant));
+                            }
+                            long end = System.currentTimeMillis();
+                            Log.d("SocietyPresent", "end-start:" + (end - start));
+                        } catch (Exception e) {
+                            Observable.error(e);
                         }
-
-
+                        return mDatas;
+//                        Elements links = document.getElementsByClass("left_contant");
 //                        Elements a13 = document.getElementsByClass("left_contant");
 //                        for (Element element : a13) {
 //                            Elements a = element.getElementsByTag("a");
@@ -67,11 +76,21 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
 //                                }
 //                            }
 //                        }
-                        long end = System.currentTimeMillis();
-                        Log.d("SocietyPresent", "end-start:" + (end - start));
-                        return mDatas;
                     }
                 });
     }
 
+    public Observable<ArticleBean> getSocietyItem(String url) {
+        return GetDataManeger.sGetDataManeger()
+                .getAritcle(url)
+                .flatMap(new Func1<Document, Observable<ArticleBean>>() {
+                    @Override
+                    public Observable<ArticleBean> call(Document document) {
+                        ArticleBean bean = new ArticleBean();
+                        bean.contant = Html.fromHtml(document.select("div.neir").toString());
+                        bean.title = document.select("h1").text();
+                        return Observable.just(bean);
+                    }
+                });
+    }
 }

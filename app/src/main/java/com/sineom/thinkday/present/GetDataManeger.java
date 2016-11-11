@@ -43,10 +43,11 @@ public class GetDataManeger {
                             document = Jsoup.connect(s)
                                     .timeout(3000)// 设置连接超时时间
                                     .method(Connection.Method.POST)
-//                                    .get();
-                                    .post();
+                                    .get();
+//                                    .post();
                         } catch (IOException e) {
                             e.printStackTrace();
+                            Observable.error(e);
                         }
                         return Observable.just(document);
                     }

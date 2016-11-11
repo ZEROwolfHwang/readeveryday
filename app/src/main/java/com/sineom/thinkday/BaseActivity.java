@@ -2,26 +2,22 @@ package com.sineom.thinkday;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import com.sineom.thinkday.adapter.LeftDrawerAdapter;
-import com.sineom.thinkday.adapter.LeftDrawerItemDecoration;
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.view.ArticleFragment;
 import com.sineom.thinkday.view.BookFragment;
 import com.sineom.thinkday.view.SocietySideFragment;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,13 +30,14 @@ import butterknife.ButterKnife;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    @BindView(R.id.rv_left_drawer)
-    public RecyclerView mRvLeftDrawer;
+    @BindView(R.id.navigation)
+    public NavigationView mNavigationView;
     private FragmentManager mManager;
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
+
     Fragment mFragment;
 
     private int getLayoutResId() {
@@ -58,38 +55,36 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initLeftDrawer() {
-        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.leftItem));
-        mRvLeftDrawer.setLayoutManager(new LinearLayoutManager(this));
-        mRvLeftDrawer.addItemDecoration(new LeftDrawerItemDecoration(48));
-        mRvLeftDrawer.setAdapter(new LeftDrawerAdapter(this, strings, new LeftDrawerAdapter.CLick() {
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onItemClick(Object position) {
-                toolbar.setTitle(strings.get((int) position));
-                openOrClose();
-                switch ((int) position) {
-                    case 0:
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_article:
                         mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
                         if (mFragment == null)
                             mFragment = new ArticleFragment();
                         initFragment(mFragment, GLobalData.ARTICLE);
                         break;
-                    case 1:
+                    case R.id.navigation_randomArticle:
+                        Toast.makeText(BaseActivity.this, "2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.navigation_society:
                         mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
                         if (mFragment == null)
                             mFragment = new SocietySideFragment();
                         initFragment(mFragment, GLobalData.SOCIETYSICE);
                         break;
-                    case 2:
+                    case R.id.navigation_book:
                         mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
                         if (mFragment == null)
                             mFragment = new BookFragment();
                         initFragment(mFragment, GLobalData.BOOK);
                         break;
-                    default:
-                        break;
                 }
+                openOrClose();
+                return true;
             }
-        }));
+        });
     }
 
 
@@ -117,7 +112,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    private void initFragment(Fragment fragment, String tag) {
+    public void initFragment(Fragment fragment, String tag) {
         mManager = getSupportFragmentManager();
         mManager.beginTransaction()
                 .replace(R.id.fragment_content, fragment, tag)

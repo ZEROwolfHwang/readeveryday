@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/fragment_article"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-    <!--android:id="@+id/freshLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,20 +19,13 @@
             <TextView
                 android:id="@+id/article_title_tv"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="40dp"
+                android:ellipsize="end"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                />
-
-            <TextView
-                android:id="@+id/article_author_tv"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:textSize="14sp"
                 />
 
             <TextView
@@ -48,11 +35,16 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="8sp"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textSize="16sp"
                 />
 
         </LinearLayout>
     </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
-    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        />
+</RelativeLayout>

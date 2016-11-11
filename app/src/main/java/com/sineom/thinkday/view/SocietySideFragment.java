@@ -5,15 +5,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.adapter.SocietySideAdapter;
 import com.sineom.thinkday.bean.SocietyBean;
+import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.present.SocietyPresent;
 import com.sineom.thinkday.present.UrlManager;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -33,6 +37,9 @@ public class SocietySideFragment extends SingleFragment {
     private SocietyPresent mPresent;
     private LinearLayoutManager mLinearLayoutManager;
     private SocietySideAdapter mSocietySideAdapter;
+    private Subscription mSocietySideFragment;
+    private Observable<ArrayList<SocietyBean>> mArrayListObservable;
+
 
     @Override
     public int createView() {
@@ -52,15 +59,21 @@ public class SocietySideFragment extends SingleFragment {
         mSocietySideAdapter = new SocietySideAdapter(getActivity(), mPresent.getDatas(), new SocietySideAdapter.ItemClick() {
             @Override
             public void onItemClick(SocietyBean societyBean) {
-
+                String url = societyBean.Url;
+                SocietyItem societyItem = new SocietyItem();
+                Bundle bundle = new Bundle();
+                bundle.putString(GLobalData.SOCIETYSICE, societyBean.Url);
+                societyItem.setArguments(bundle);
+                ((BaseActivity) getActivity()).initFragment(societyItem, GLobalData.SOCIETYSICEITEM);
             }
         });
+        mArrayListObservable = mPresent.getArticle(UrlManager.SOCIETYSIDE);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresent.getArticle(UrlManager.SOCIETYSIDE)
+        mSocietySideFragment = mArrayListObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                @Override
@@ -71,15 +84,22 @@ public class SocietySideFragment extends SingleFragment {
                         new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                Log.d("SocietySideFragment", throwable.getMessage());
+                                Log.d("SocietySideFragment", "" + throwable.getMessage());
                             }
                         }
                 );
     }
 
     @Override
-    public void initRecycler() {
+    public void initView() {
         society_rv.setLayoutManager(mLinearLayoutManager);
         society_rv.setAdapter(mSocietySideAdapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (!mSocietySideFragment.isUnsubscribed())
+            mSocietySideFragment.unsubscribe();
     }
 }
