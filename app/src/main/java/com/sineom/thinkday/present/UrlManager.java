@@ -12,5 +12,7 @@ package com.sineom.thinkday.present;
 
 public class UrlManager {
     public static final String ARTICLE = "http://meiriyiwen.com/";
+    public static final String RANDOMARTICLE = "http://meiriyiwen.com/random";
     public static final String SOCIETYSIDE = "http://www.timetimetime.net/catalog.asp?cate=30&page=";
+    public static final String BOOK = "http://www.tuijianshu.net/portal.php?mod=list&catid=";
 }

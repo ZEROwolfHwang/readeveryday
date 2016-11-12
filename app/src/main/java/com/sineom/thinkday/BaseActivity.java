@@ -12,11 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.view.ArticleFragment;
 import com.sineom.thinkday.view.BookFragment;
+import com.sineom.thinkday.view.RandomArticleFragment;
 import com.sineom.thinkday.view.SocietySideFragment;
 
 import butterknife.BindView;
@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @BindView(R.id.navigation)
     public NavigationView mNavigationView;
-    private FragmentManager mManager;
+    public FragmentManager mManager;
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -59,21 +59,28 @@ public class BaseActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_article:
+                        toolbar.setTitle("每日一文");
                         mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
                         if (mFragment == null)
                             mFragment = new ArticleFragment();
                         initFragment(mFragment, GLobalData.ARTICLE);
                         break;
                     case R.id.navigation_randomArticle:
-                        Toast.makeText(BaseActivity.this, "2", Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("精彩推荐");
+                        mFragment = mManager.findFragmentByTag(GLobalData.RANDOMARTICLE);
+                        if (mFragment == null)
+                            mFragment = new RandomArticleFragment();
+                        initFragment(mFragment, GLobalData.RANDOMARTICLE);
                         break;
                     case R.id.navigation_society:
+                        toolbar.setTitle("另一面");
                         mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
                         if (mFragment == null)
                             mFragment = new SocietySideFragment();
                         initFragment(mFragment, GLobalData.SOCIETYSICE);
                         break;
                     case R.id.navigation_book:
+                        toolbar.setTitle("读点好书");
                         mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
                         if (mFragment == null)
                             mFragment = new BookFragment();

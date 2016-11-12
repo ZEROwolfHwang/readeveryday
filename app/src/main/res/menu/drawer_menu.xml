@@ -10,7 +10,7 @@
             android:title="随机文章"/>
         <item
             android:id="@+id/navigation_society"
-            android:title="社会一面"/>
+            android:title="另一面"/>
         <item
             android:id="@+id/navigation_book"
             android:title="好书推荐"/>

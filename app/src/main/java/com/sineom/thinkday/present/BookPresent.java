@@ -23,12 +23,12 @@ import rx.functions.Func1;
  * Time: 00:04
  * DESIC
  */
-public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
+public class BookPresent implements Present<ArrayList<SocietyBean>> {
 
     private final SocietyModelImpl mSocietyModel;
     private ArrayList<SocietyBean> mDatas;
 
-    public SocietyPresent() {
+    public BookPresent() {
         mSocietyModel = new SocietyModelImpl();
         mDatas = new ArrayList<>();
     }
@@ -50,13 +50,15 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                     public ArrayList<SocietyBean> call(Document document) {
                         long start = System.currentTimeMillis();
                         try {
-                            Elements links = document.select("div.left_contant");
+                            Elements links = document.select("dd.xs2l");
                             for (Element link : links) {
-                                Elements select = link.select("div.contant_title > a");
-                                String href = select.attr("href");
-                                String title = select.attr("title");
-                                String contant = link.select("div.listzi").text();
-                                mDatas.add(saveData(href, title, contant));
+
+                                String attr = link.getElementsByTag("em").get(0).attr("href");
+                                link.getElementsByTag("em").remove();
+                                link.getElementsByTag("label").remove();
+                                link.getElementsByTag("span ").remove();
+                                String replace = link.text().replace("分类: ", "");
+                                Log.d("BookPresent", attr);
                             }
                             long end = System.currentTimeMillis();
                             Log.d("SocietyPresent", "end-start:" + (end - start));

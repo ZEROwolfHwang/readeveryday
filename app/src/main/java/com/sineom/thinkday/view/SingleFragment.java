@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.sineom.thinkday.R;
 
 import butterknife.ButterKnife;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * User: sineom(sineom@126.com)
@@ -25,6 +26,7 @@ public abstract class SingleFragment extends Fragment {
 
     FragmentManager mManager;
     public Handler mHandler = new Handler();
+    public CompositeSubscription mSubscription = new CompositeSubscription();
 
     public abstract int createView();
 
@@ -94,5 +96,11 @@ public abstract class SingleFragment extends Fragment {
                 mRefreshLayout.setRefreshing(false);
             }
         }, 300);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mSubscription.unsubscribe();
     }
 }

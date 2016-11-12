@@ -7,8 +7,11 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="6dp"
     app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="4dp"
     >
 
     <LinearLayout
