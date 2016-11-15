@@ -7,12 +7,9 @@
             android:title="每日一文"/>
         <item
             android:id="@+id/navigation_randomArticle"
-            android:title="随机文章"/>
+            android:title="精彩推荐"/>
         <item
             android:id="@+id/navigation_society"
-            android:title="另一面"/>
-        <item
-            android:id="@+id/navigation_book"
             android:title="好书推荐"/>
     </group>
 </menu>

@@ -75,7 +75,7 @@ public abstract class SingleFragment extends Fragment {
         mRefreshLayout.setProgressBackgroundColor(R.color.Indigo_colorPrimary);
         //设置下拉出现小圆圈是否是缩放出现，出现的位置，最大的下拉位置
         mRefreshLayout.setProgressViewOffset(true, 50, 0);
-        mRefreshLayout.setDistanceToTriggerSync(300);
+        mRefreshLayout.setDistanceToTriggerSync(150);
 
         //设置下拉圆圈的大小，两个值 LARGE， DEFAULT
         mRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
@@ -99,8 +99,8 @@ public abstract class SingleFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDetach() {
+        super.onDetach();
         mSubscription.unsubscribe();
     }
 }

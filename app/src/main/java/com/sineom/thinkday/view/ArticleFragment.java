@@ -95,10 +95,10 @@ public class ArticleFragment extends SingleFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (!mSubscribe.isUnsubscribed())
-            mSubscribe.unsubscribe();
+    public void onDetach() {
+        super.onDetach();
+        if (mRefreshLayout.isRefreshing())
+            mRefreshLayout.setRefreshing(false);
     }
 
     @Override

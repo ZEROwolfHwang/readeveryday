@@ -16,4 +16,5 @@ public class ArticleBean {
     public String title;
     public String author;
     public Spanned contant;
+    public String contant1;
 }

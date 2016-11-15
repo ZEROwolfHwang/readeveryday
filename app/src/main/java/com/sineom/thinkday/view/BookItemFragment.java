@@ -27,7 +27,7 @@ import rx.functions.Action1;
  * @updataDes ${描述更新内容}
  */
 
-public class SocietyItem extends SingleFragment {
+public class BookItemFragment extends SingleFragment {
 
     private final SocietyPresent mPresent;
     @BindView(R.id.article_title_tv)
@@ -40,7 +40,7 @@ public class SocietyItem extends SingleFragment {
     private Observable<ArticleBean> mSocietyItem;
 
 
-    public SocietyItem() {
+    public BookItemFragment() {
         mPresent = new SocietyPresent();
     }
 
@@ -63,7 +63,8 @@ public class SocietyItem extends SingleFragment {
 
     @OnClick(R.id.fab_back)
     public void back(View view) {
-        ((BaseActivity) getActivity()).initFragment(new SocietySideFragment(), "SocietyItem");
+        ((BaseActivity) getActivity()).initFragment(new BookFragment(), "BookItemFragment");
+//        ((BaseActivity) getActivity()).fragmentHideAndShow(BookItemFragment.this, new BookFragment());
     }
 
     @Override
