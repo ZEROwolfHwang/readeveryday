@@ -41,8 +41,8 @@ public class GetDataManeger {
                         Document document = null;
                         try {
                             document = Jsoup.connect(s)
-                                    .timeout(3000)// 设置连接超时时间
-                                    .method(Connection.Method.POST)
+                                    .timeout(5000)// 设置连接超时时间
+                                    .method(Connection.Method.GET)
                                     .get();
 //                                    .post();
                         } catch (IOException e) {

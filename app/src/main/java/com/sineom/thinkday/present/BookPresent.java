@@ -23,12 +23,12 @@ import rx.functions.Func1;
  * Time: 00:04
  * DESIC
  */
-public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
+public class BookPresent implements Present<ArrayList<SocietyBean>> {
 
     private final SocietyModelImpl mSocietyModel;
     private ArrayList<SocietyBean> mDatas;
 
-    public SocietyPresent() {
+    public BookPresent() {
         mSocietyModel = new SocietyModelImpl();
         mDatas = new ArrayList<>();
     }
@@ -52,13 +52,13 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                         try {
                             Elements links = document.select("dd.xs2l");
                             for (Element link : links) {
-                                String title = link.select("a.xi2").get(0).text();
-                                String attr = link.select("a.xi2").get(0).attr("href");
+
+                                String attr = link.getElementsByTag("em").get(0).attr("href");
                                 link.getElementsByTag("em").remove();
                                 link.getElementsByTag("label").remove();
                                 link.getElementsByTag("span ").remove();
                                 String replace = link.text().replace("分类: ", "");
-                                mDatas.add(saveData(attr, title, replace));
+                                Log.d("BookPresent", attr);
                             }
                             long end = System.currentTimeMillis();
                             Log.d("SocietyPresent", "end-start:" + (end - start));
@@ -74,36 +74,29 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
     public Observable<ArrayList<SocietyBean>> getUpData(String url, final String firstUrl) {
         return GetDataManeger.sGetDataManeger().getAritcle(url)
                 .throttleFirst(3, TimeUnit.SECONDS)
-                .filter(new Func1<Document, Boolean>() {
-                    @Override
-                    public Boolean call(Document document) {
-                        String href = document.select("dd.xs2l").get(0).select("a.xi2").get(0).attr("href");
-                        boolean b = !firstUrl.equalsIgnoreCase(href);
-                        return !firstUrl.equalsIgnoreCase(href);
-                    }
-                })
                 .map(new Func1<Document, ArrayList<SocietyBean>>() {
                     @Override
                     public ArrayList<SocietyBean> call(Document document) {
-                        mDatas = new ArrayList<SocietyBean>();
                         long start = System.currentTimeMillis();
                         try {
-                            Elements links = document.select("dd.xs2l");
+                            Elements links = document.select("div.left_contant");
                             for (Element link : links) {
-                                String title = link.select("a.xi2").get(0).text();
-                                String attr = link.select("a.xi2").get(0).attr("href");
-                                link.getElementsByTag("em").remove();
-                                link.getElementsByTag("label").remove();
-                                link.getElementsByTag("span ").remove();
-                                String replace = link.text().replace("分类: ", "");
-                                mDatas.add(saveData(attr, title, replace));
+                                Elements select = link.select("div.contant_title > a");
+                                String href = select.attr("href");
+                                if (firstUrl.equals(href)) {
+                                    Observable.empty();
+                                    break;
+                                }
+                                String title = select.attr("title");
+                                String contant = link.select("div.listzi").text();
+                                mDatas.add(0, saveData(href, title, contant));
                             }
                             long end = System.currentTimeMillis();
                             Log.d("SocietyPresent", "end-start:" + (end - start));
                         } catch (Exception e) {
                             Observable.error(e);
                         }
-                        return mDatas;
+                        return null;
                     }
                 });
     }
@@ -116,19 +109,10 @@ public class SocietyPresent implements Present<ArrayList<SocietyBean>> {
                     public Observable<ArticleBean> call(Document document) {
                         ArticleBean bean = new ArticleBean();
                         try {
-                            document.getElementsByTag("img").remove();
-                            Element article_content = document.getElementById("article_content");
-                            article_content.removeClass("bdsharebuttonbox");
-                            article_content.getElementsByTag("a").remove();
-                            article_content.getElementsByTag("script").remove();
-                            document.getElementsByClass("a_af").remove();
-                            bean.contant1 = article_content.toString();
+                            document.getElementsByTag("img ").remove();
+                            bean.contant = Html.fromHtml(document.select("div.neir").toString());
                             bean.title = document.select("h1").text();
-                            if(bean.contant1.contains("尽在")){
-                                bean.contant1.replace("尽在","");
-                            }
-                                Log.d("SocietyPresent", bean.title);
-                            bean.contant = Html.fromHtml(bean.contant1);
+
                         } catch (Exception e) {
                             Observable.error(e);
                         }

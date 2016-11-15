@@ -15,9 +15,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.sineom.thinkday.present.GLobalData;
+import com.sineom.thinkday.utils.NetWorkUtils;
 import com.sineom.thinkday.view.ArticleFragment;
+import com.sineom.thinkday.view.RandomArticleFragment;
 import com.sineom.thinkday.view.BookFragment;
-import com.sineom.thinkday.view.SocietySideFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +33,11 @@ public class BaseActivity extends AppCompatActivity {
 
     @BindView(R.id.navigation)
     public NavigationView mNavigationView;
-    private FragmentManager mManager;
+    public FragmentManager mManager;
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
-
     Fragment mFragment;
 
     private int getLayoutResId() {
@@ -49,7 +49,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         ButterKnife.bind(this);
-        initFragment(new ArticleFragment(), GLobalData.ARTICLE);
+        mManager = getSupportFragmentManager();
+        if (NetWorkUtils.isNetworkConnected(this)) {
+            initFragment(new ArticleFragment(), GLobalData.ARTICLE);
+        } else {
+            Toast.makeText(this, "请连接网络后再使用", Toast.LENGTH_SHORT).show();
+        }
         initToolbar();
         initLeftDrawer();
     }
@@ -58,27 +63,31 @@ public class BaseActivity extends AppCompatActivity {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                if (!NetWorkUtils.isNetworkConnected(BaseActivity.this)) {
+                    Toast.makeText(BaseActivity.this, "请连接网络后再使用", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 switch (item.getItemId()) {
                     case R.id.navigation_article:
+                        toolbar.setTitle("每日一文");
                         mFragment = mManager.findFragmentByTag(GLobalData.ARTICLE);
                         if (mFragment == null)
                             mFragment = new ArticleFragment();
                         initFragment(mFragment, GLobalData.ARTICLE);
                         break;
                     case R.id.navigation_randomArticle:
-                        Toast.makeText(BaseActivity.this, "2", Toast.LENGTH_SHORT).show();
+                        toolbar.setTitle("精彩推荐");
+                        mFragment = mManager.findFragmentByTag(GLobalData.RANDOMARTICLE);
+                        if (mFragment == null)
+                            mFragment = new RandomArticleFragment();
+                        initFragment(mFragment, GLobalData.RANDOMARTICLE);
                         break;
                     case R.id.navigation_society:
+                        toolbar.setTitle("好书推荐");
                         mFragment = mManager.findFragmentByTag(GLobalData.SOCIETYSICE);
                         if (mFragment == null)
-                            mFragment = new SocietySideFragment();
-                        initFragment(mFragment, GLobalData.SOCIETYSICE);
-                        break;
-                    case R.id.navigation_book:
-                        mFragment = mManager.findFragmentByTag(GLobalData.BOOK);
-                        if (mFragment == null)
                             mFragment = new BookFragment();
-                        initFragment(mFragment, GLobalData.BOOK);
+                        initFragment(mFragment, GLobalData.SOCIETYSICE);
                         break;
                 }
                 openOrClose();
@@ -113,10 +122,24 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void initFragment(Fragment fragment, String tag) {
-        mManager = getSupportFragmentManager();
         mManager.beginTransaction()
                 .replace(R.id.fragment_content, fragment, tag)
                 .commit();
+    }
+
+    public void fragmentHideAndShow(Fragment hideFrag, Fragment showFrag) {
+        if (!showFrag.isAdded()) {
+            mManager.beginTransaction()
+                    .hide(hideFrag)
+                    .add(R.id.fragment_content, showFrag)
+                    .show(showFrag)
+                    .commit();
+        } else {
+            mManager.beginTransaction()
+                    .hide(hideFrag)
+                    .show(showFrag)
+                    .commit();
+        }
     }
 
 }

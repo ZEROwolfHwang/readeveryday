@@ -2,7 +2,6 @@ package com.sineom.thinkday.view;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.sineom.thinkday.R;
@@ -22,7 +21,7 @@ import rx.functions.Action1;
  * Time: 15:30
  * DESIC
  */
-public class ArticleFragment extends SingleFragment {
+public class RandomArticleFragment extends SingleFragment {
     @BindView(R.id.article_title_tv)
     TextView mArticleTitleTv;
     @BindView(R.id.article_author_tv)
@@ -35,13 +34,13 @@ public class ArticleFragment extends SingleFragment {
     private Subscription mSubscribe;
     private Observable<ArticleBean> mArticleBeanObservable;
 
-    public ArticleFragment() {
+    public RandomArticleFragment() {
     }
 
     @Override
     public void initDatas() {
         mPresentIml = new PresentIml();
-        mArticleBeanObservable = mPresentIml.getArticle(UrlManager.ARTICLE);
+        mArticleBeanObservable = mPresentIml.getRandomArticle(UrlManager.RANDOMARTICLE);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class ArticleFragment extends SingleFragment {
                     @Override
                     public void onRefresh() {
                         // 刷新动画开始后回调到此方法
-
+                        setAritcle();
                     }
                 }
         );
@@ -77,9 +76,6 @@ public class ArticleFragment extends SingleFragment {
                                @Override
                                public void call(ArticleBean articleBean) {
                                    closeFresh(mRefreshLayout);
-                                   mRefreshLayout.setEnabled(false);
-                                   if (articleBean == null)
-                                       return;
                                    mArticleTitleTv.setText(articleBean.title);
                                    mArticleAuthorTv.setText(articleBean.author);
                                    mArticleTv.setText(articleBean.contant);
@@ -88,10 +84,10 @@ public class ArticleFragment extends SingleFragment {
                         new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                Log.d("ArticleFragment", throwable.getMessage() + "");
                             }
                         }
                 );
+        mSubscription.add(mSubscribe);
     }
 
     @Override

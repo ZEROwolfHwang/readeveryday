@@ -6,4 +6,6 @@
     <color name="Indigo_colorPrimaryDark">#303f9f</color>
     <color name="Indigo_colorPrimary">#00BCD4</color>
     <color name="Indigo_nav_color">#4675FF</color>
+    <color name="drawer_itembg_normal">#fff</color>
+    <color name="drawer_itembg_presed">#1000</color>
 </resources>
