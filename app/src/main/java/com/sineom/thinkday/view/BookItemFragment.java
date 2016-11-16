@@ -2,18 +2,16 @@ package com.sineom.thinkday.view;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.View;
 import android.widget.TextView;
 
-import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.bean.ArticleBean;
 import com.sineom.thinkday.present.GLobalData;
 import com.sineom.thinkday.present.SocietyPresent;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
@@ -61,15 +59,15 @@ public class BookItemFragment extends SingleFragment {
         return R.layout.fragment_society_item;
     }
 
-    @OnClick(R.id.fab_back)
-    public void back(View view) {
-        ((BaseActivity) getActivity()).initFragment(new BookFragment(), "BookItemFragment");
-//        ((BaseActivity) getActivity()).fragmentHideAndShow(BookItemFragment.this, new BookFragment());
-    }
+//    @OnClick(R.id.fab_back)
+//    public void back(View view) {
+//        ((BaseActivity) getActivity()).initFragment(new BookFragment(), "BookItemFragment");
+////        ((BaseActivity) getActivity()).fragmentHideAndShow(BookItemFragment.this, new BookFragment());
+//    }
 
     @Override
     public void initView() {
-        mSocietyItem.observeOn(AndroidSchedulers.mainThread())
+        Subscription subscribe = mSocietyItem.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ArticleBean>() {
                                @Override
                                public void call(ArticleBean bean) {
@@ -86,5 +84,14 @@ public class BookItemFragment extends SingleFragment {
                             }
                         }
                 );
+        mSubscription.add(subscribe);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

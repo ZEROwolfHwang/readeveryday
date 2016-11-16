@@ -46,21 +46,5 @@
 
             </LinearLayout>
         </ScrollView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/back"
-            app:backgroundTint="@color/Indigo_colorPrimary"
-            app:borderWidth="0dp"
-            app:elevation="6dp"
-            app:layout_anchorGravity="bottom|center"
-            app:pressedTranslationZ="12dp"
-            app:rippleColor="@color/Indigo_nav_color"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

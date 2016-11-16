@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.sineom.thinkday.BaseActivity;
 import com.sineom.thinkday.R;
 import com.sineom.thinkday.adapter.SocietySideAdapter;
 import com.sineom.thinkday.bean.SocietyBean;
@@ -70,8 +69,13 @@ public class BookFragment extends SingleFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(GLobalData.SOCIETYSICE, societyBean.Url);
                 bookItemFragment.setArguments(bundle);
-                ((BaseActivity) getActivity()).initFragment(bookItemFragment, GLobalData.SOCIETYSICEITEM);
+//                ((BaseActivity) getActivity()).initFragment(bookItemFragment, GLobalData.SOCIETYSICEITEM);
 //                ((BaseActivity) getActivity()).fragmentHideAndShow(BookFragment.this, bookItemFragment);
+                getFragmentManager().beginTransaction()
+                        .hide(BookFragment.this)
+                        .add(R.id.fragment_content, bookItemFragment, GLobalData.SOCIETYSICEITEM)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         mArrayListObservable = mPresent.getArticle(UrlManager.BOOK + 1);
@@ -116,7 +120,7 @@ public class BookFragment extends SingleFragment {
                     @Override
                     public void onRefresh() {
                         // 刷新动画开始后回调到此方法
-                        mPresent.getUpData(UrlManager.BOOK + 1, mPresent.getDatas().size() == 0 ? null : mPresent.getDatas().get(0).Url)
+                        Subscription subscribe = mPresent.getUpData(UrlManager.BOOK + 1, mPresent.getDatas().size() == 0 ? null : mPresent.getDatas().get(0).Url)
                                 .compose(RxHolder.<ArrayList<SocietyBean>>io_main())
                                 .subscribe(new Action1<ArrayList<SocietyBean>>() {
                                                @Override
@@ -139,6 +143,7 @@ public class BookFragment extends SingleFragment {
                                                 closeFresh(mRefreshLayout);
                                             }
                                         });
+                        mSubscription.add(subscribe);
                     }
                 }
         );
@@ -175,8 +180,8 @@ public class BookFragment extends SingleFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (mRefreshLayout.isRefreshing())
             mRefreshLayout.setRefreshing(false);
     }
