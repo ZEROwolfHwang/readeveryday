@@ -93,14 +93,16 @@ public abstract class SingleFragment extends Fragment {
             @Override
             public void run() {
                 // 停止刷新
-                mRefreshLayout.setRefreshing(false);
+                if (mRefreshLayout.isRefreshing())
+                    mRefreshLayout.setRefreshing(false);
             }
-        }, 300);
+        }, 200);
     }
 
+
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
+        super.onDestroyView();
         mSubscription.unsubscribe();
     }
 }
