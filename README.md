@@ -1,3 +1,6 @@
 #thinkday
-## fenzhi分支shuoming分支说明
-- ziji自己de自己的fenzhi
+## 分支命名
+- 格式为自己名称首字母_dev格式
+
+> master分支不要轻易合并，这个是最终的退路，自己所在分支可以进行任意玩耍
+合并到master之前自己先检测一遍
